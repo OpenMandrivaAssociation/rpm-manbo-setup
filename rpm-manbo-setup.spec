@@ -1,5 +1,5 @@
 %define name rpm-manbo-setup
-%define version 0.1
+%define version 0.2
 %define release %mkrel 1
 
 Summary: The Manbo rpm configuration and scripts
@@ -20,7 +20,8 @@ The Manbo rpm configuration and scripts.
 %install
 rm -rf %buildroot
 install -d %buildroot/usr/lib/rpm/manbo
-install -m 644 %SOURCE0 %SOURCE1 %SOURCE2 %buildroot/usr/lib/rpm/manbo
+install -m 644 %SOURCE0 %SOURCE1 %buildroot/usr/lib/rpm/manbo
+install -m 644 %SOURCE2 %buildroot/usr/lib/rpm
 
 %clean
 rm -rf %buildroot
@@ -28,3 +29,4 @@ rm -rf %buildroot
 %files
 %defattr(-,root,root)
 %_prefix/lib/rpm/manbo
+%_prefix/lib/rpm/rpmb_deprecated
