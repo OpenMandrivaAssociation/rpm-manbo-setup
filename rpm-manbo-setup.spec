@@ -1,5 +1,5 @@
 %define name rpm-manbo-setup
-%define version 0.4
+%define version 0.5
 %define release %mkrel 1
 
 Summary: The Manbo rpm configuration and scripts
