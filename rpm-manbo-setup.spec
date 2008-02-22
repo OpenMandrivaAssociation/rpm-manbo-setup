@@ -1,6 +1,11 @@
 %define name rpm-manbo-setup
 %define version 0.5
-%define release %mkrel 1
+%define release %manbo_mkrel 1
+
+# for bootstrapping purpose:
+%if "%{?manbo_mkrel:has_manbo}" == ""
+%define manbo_mkrel(c:) %{1}
+%endif
 
 Summary: The Manbo rpm configuration and scripts
 Name: %{name}
