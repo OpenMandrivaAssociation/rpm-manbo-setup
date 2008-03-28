@@ -1,5 +1,5 @@
 %define name rpm-manbo-setup
-%define version 0.5
+%define version 0.6
 %define release %manbo_mkrel 1
 
 # for bootstrapping purpose:
