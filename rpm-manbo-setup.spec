@@ -1,6 +1,6 @@
 %define name rpm-manbo-setup
 %define version 2
-%define release %manbo_mkrel 1
+%define release %manbo_mkrel 2
 
 # for bootstrapping purpose:
 %if "%{?manbo_mkrel:has_manbo}" == ""
@@ -16,6 +16,7 @@ Source1: rpmpopt
 Source2: rpmb_deprecated
 Source3: manbo.macros
 Source4: manbo-build.macros
+Source5: fix-libtool-ltmain-from-overlinking
 License: GPL
 Group: System/Configuration/Packaging
 BuildRoot: %{_tmppath}/%{name}-buildroot
@@ -36,6 +37,7 @@ The Manbo rpm configuration and scripts dedicated to build rpms.
 rm -rf %buildroot
 install -d %buildroot/usr/lib/rpm/manbo
 install -m 644 %SOURCE0 %SOURCE1 %buildroot/usr/lib/rpm/manbo
+install %SOURCE5 %buildroot/usr/lib/rpm/manbo
 install %SOURCE2 %buildroot/usr/lib/rpm
 
 install -D -m 644 %SOURCE3 %buildroot/etc/rpm/macros.d/10manbo.macros
@@ -48,8 +50,11 @@ rm -rf %buildroot
 %defattr(-,root,root)
 %dir %{_sysconfdir}/rpm/macros.d
 %{_sysconfdir}/rpm/macros.d/10manbo.macros
-%_prefix/lib/rpm/manbo
+%dir %_prefix/lib/rpm/manbo
+%_prefix/lib/rpm/manbo/rpmpopt
+%_prefix/lib/rpm/manbo/rpmrc
 %_prefix/lib/rpm/rpmb_deprecated
 
 %files build
 %{_sysconfdir}/rpm/macros.d/10manbo-build.macros
+%_prefix/lib/rpm/manbo/fix-libtool-ltmain-from-overlinking
