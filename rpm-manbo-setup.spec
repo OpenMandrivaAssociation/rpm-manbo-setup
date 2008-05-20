@@ -1,6 +1,6 @@
 %define name rpm-manbo-setup
 %define version 2
-%define release %manbo_mkrel 2
+%define release %manbo_mkrel 3
 
 # for bootstrapping purpose:
 %if "%{?manbo_mkrel:has_manbo}" == ""
@@ -17,6 +17,7 @@ Source2: rpmb_deprecated
 Source3: manbo.macros
 Source4: manbo-build.macros
 Source5: fix-libtool-ltmain-from-overlinking
+Source6: force-as-needed-for-shared-lib-in-libtool
 License: GPL
 Group: System/Configuration/Packaging
 BuildRoot: %{_tmppath}/%{name}-buildroot
