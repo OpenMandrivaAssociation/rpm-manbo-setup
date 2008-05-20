@@ -38,7 +38,7 @@ The Manbo rpm configuration and scripts dedicated to build rpms.
 rm -rf %buildroot
 install -d %buildroot/usr/lib/rpm/manbo
 install -m 644 %SOURCE0 %SOURCE1 %buildroot/usr/lib/rpm/manbo
-install %SOURCE5 %buildroot/usr/lib/rpm/manbo
+install %SOURCE5 %SOURCE6 %buildroot/usr/lib/rpm/manbo
 install %SOURCE2 %buildroot/usr/lib/rpm
 
 install -D -m 644 %SOURCE3 %buildroot/etc/rpm/macros.d/10manbo.macros
@@ -59,3 +59,4 @@ rm -rf %buildroot
 %files build
 %{_sysconfdir}/rpm/macros.d/10manbo-build.macros
 %_prefix/lib/rpm/manbo/fix-libtool-ltmain-from-overlinking
+%_prefix/lib/rpm/manbo/force-as-needed-for-shared-lib-in-libtool
