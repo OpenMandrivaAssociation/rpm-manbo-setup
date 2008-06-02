@@ -1,6 +1,6 @@
 %define name rpm-manbo-setup
 %define version 2
-%define release %manbo_mkrel 7
+%define release %manbo_mkrel 8
 
 # for bootstrapping purpose:
 %if "%{?manbo_mkrel:has_manbo}" == ""
