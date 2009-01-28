@@ -1,6 +1,6 @@
 %define name rpm-manbo-setup
 %define version 2
-%define release %manbo_mkrel 15
+%define release %manbo_mkrel 16
 
 # for bootstrapping purpose:
 %if "%{?manbo_mkrel:has_manbo}" == ""
@@ -20,6 +20,7 @@ Source5: fix-libtool-ltmain-from-overlinking
 Source6: force-as-needed-for-shared-lib-in-libtool
 Source7: drop-ld-no-undefined-for-shared-lib-modules-in-libtool
 Source8: fix-dlsearch-path-in-libtool-for-multilib
+Source9: fix-libtool-from-moving-options-after-libs
 License: GPL
 Group: System/Configuration/Packaging
 BuildRoot: %{_tmppath}/%{name}-buildroot
@@ -40,7 +41,7 @@ The Manbo rpm configuration and scripts dedicated to build rpms.
 rm -rf %buildroot
 install -d %buildroot/usr/lib/rpm/manbo
 install -m 644 %SOURCE0 %SOURCE1 %buildroot/usr/lib/rpm/manbo
-install %SOURCE5 %SOURCE6 %SOURCE7 %SOURCE8 %buildroot/usr/lib/rpm/manbo
+install %SOURCE5 %SOURCE6 %SOURCE7 %SOURCE8 %SOURCE9 %buildroot/usr/lib/rpm/manbo
 install %SOURCE2 %buildroot/usr/lib/rpm
 
 install -D -m 644 %SOURCE3 %buildroot/etc/rpm/macros.d/10manbo.macros
@@ -64,3 +65,4 @@ rm -rf %buildroot
 %_prefix/lib/rpm/manbo/force-as-needed-for-shared-lib-in-libtool
 %_prefix/lib/rpm/manbo/drop-ld-no-undefined-for-shared-lib-modules-in-libtool
 %_prefix/lib/rpm/manbo/fix-dlsearch-path-in-libtool-for-multilib
+%_prefix/lib/rpm/manbo/fix-libtool-from-moving-options-after-libs
