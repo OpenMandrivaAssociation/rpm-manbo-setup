@@ -4,7 +4,7 @@
 
 # for bootstrapping purpose:
 %if "%{?manbo_mkrel:has_manbo}" == ""
-%define manbo_mkrel(c:) %{1}
+%define manbo_mkrel(c:) %{-c: 0.%{-c*}.}%{1}%{?subrel:.%subrel}mnb1
 %endif
 
 Summary: The Manbo rpm configuration and scripts
