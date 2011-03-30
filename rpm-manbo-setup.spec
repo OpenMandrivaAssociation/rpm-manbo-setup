@@ -11,9 +11,6 @@ Summary: The Manbo rpm configuration and scripts
 Name: %{name}
 Version: %{version}
 Release: %{release}
-Source0: rpmrc
-Source1: rpmpopt
-Source2: rpmb_deprecated
 Source3: manbo.macros
 Source4: manbo-build.macros
 Source5: fix-libtool-ltmain-from-overlinking
@@ -40,9 +37,7 @@ The Manbo rpm configuration and scripts dedicated to build rpms.
 %install
 rm -rf %buildroot
 install -d %buildroot/usr/lib/rpm/manbo
-install -m 644 %SOURCE0 %SOURCE1 %buildroot/usr/lib/rpm/manbo
 install %SOURCE5 %SOURCE6 %SOURCE7 %SOURCE8 %SOURCE9 %buildroot/usr/lib/rpm/manbo
-install %SOURCE2 %buildroot/usr/lib/rpm
 
 install -D -m 644 %SOURCE3 %buildroot/etc/rpm/macros.d/10manbo.macros
 install -D -m 644 %SOURCE4 %buildroot/etc/rpm/macros.d/10manbo-build.macros
@@ -55,9 +50,6 @@ rm -rf %buildroot
 %dir %{_sysconfdir}/rpm/macros.d
 %{_sysconfdir}/rpm/macros.d/10manbo.macros
 %dir %_prefix/lib/rpm/manbo
-%_prefix/lib/rpm/manbo/rpmpopt
-%_prefix/lib/rpm/manbo/rpmrc
-%_prefix/lib/rpm/rpmb_deprecated
 
 %files build
 %{_sysconfdir}/rpm/macros.d/10manbo-build.macros
