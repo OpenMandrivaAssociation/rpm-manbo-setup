@@ -1,7 +1,7 @@
 Summary:	The Manbo rpm configuration and scripts
 Name:		rpm-manbo-setup
 Version:	2
-Release:	24
+Release:	25
 Source3:	manbo.macros
 Source4:	manbo-build.macros
 Source5:	fix-libtool-ltmain-from-overlinking
@@ -20,6 +20,7 @@ The Manbo rpm configuration and scripts.
 Group:		System/Configuration/Packaging
 Summary:	The Manbo rpm configuration and scripts to build rpms
 Requires:	%name = %version-%release
+Requires:	binutils
 
 %description	build
 The Manbo rpm configuration and scripts dedicated to build rpms.
