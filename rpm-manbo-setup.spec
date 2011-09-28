@@ -1,7 +1,7 @@
 Summary:	The Manbo rpm configuration and scripts
 Name:		rpm-manbo-setup
 Version:	2
-Release:	28
+Release:	29
 Source3:	manbo.macros
 Source4:	manbo-build.macros
 Source5:	fix-libtool-ltmain-from-overlinking
