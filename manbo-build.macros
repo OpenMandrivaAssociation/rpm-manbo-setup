@@ -1,0 +1,111 @@
+
+%_enable_debug_packages 1
+
+
+# Default extension to use (for info files)
+%_extension .xz
+
+
+%__install_info /sbin/install-info
+
+%_install_info() if [[ -f %{_infodir}/%{1}%{_extension} ]]; then %{__install_info} %{_infodir}/%{1}%{_extension} --dir=%{_infodir}/dir; fi \
+%{nil}
+# (nb: keep the "alone on its line ';'")
+%_remove_install_info() if [ "$1" = "0" ]; then if [[ -f %{_infodir}/%{1}%{_extension} ]]; then %{__install_info} %{_infodir}/%{1}%{_extension} --dir=%{_infodir}/dir --remove ; fi; fi \
+%{nil}
+
+
+# Macro: %{mklibname <name> [<major> [<minor>]] [-s] [-d]}
+# - %{mklibname test}               => lib64test, on a lib64 platform
+# - %{mklibname test 1 -d}      => libtest1-devel
+# - %{mklibname test 1 -d 0 -s} => libtest1_0-static-devel
+%mklibname(ds)  %{_lib}%{1}%{?2:%{2}}%{?3:_%{3}}%{-s:-static}%{-d:-devel}
+
+%debugcflags %{?_enable_debug_packages:-g -frecord-gcc-switches -Wstrict-aliasing=2}
+
+# common compilation flags
+
+%_fortify_cflags -Wp,-D_FORTIFY_SOURCE=2
+
+# cf http://wiki.mandriva.com/en/Development/Packaging/Problems#format_not_a_string_literal_and_no_format_arguments
+%Werror_cflags -Wformat -Werror=format-security
+
+%_ssp_cflags -fstack-protector --param=ssp-buffer-size=4%{?_serverbuild_flags: %_serverbuild_flags}
+%__common_cflags -O2 %{debugcflags} -pipe %{Werror_cflags} %{?_fortify_cflags}
+%__common_cflags_with_ssp %{__common_cflags} %{?_ssp_cflags}
+
+# Servers opt flags.
+# Also set the env variables for backward compatibility (#32050).
+%serverbuild %define _serverbuild_flags -fstack-protector-all \
+export CFLAGS="%optflags"; export CXXFLAGS="%optflags"; export RPM_OPT_FLAGS="%optflags" \
+%{nil}
+
+
+%__fix_libtool_ltmain_from_overlinking /usr/lib/rpm/manbo/fix-libtool-ltmain-from-overlinking
+%__fix_libtool_from_moving_options_after_libs /usr/lib/rpm/manbo/fix-libtool-from-moving-options-after-libs
+%__fix_dlsearch_path_in_libtool_for_multilib /usr/lib/rpm/manbo/fix-dlsearch-path-in-libtool-for-multilib
+
+%__cputoolize cputoolize
+
+%__libtoolize_configure %{?__libtoolize:(cd $CONFIGURE_TOP; [ ! -f configure.in -a ! -f configure.ac ] || %{__libtoolize} --copy --force)}
+
+%ldflags %{?!_disable_ld_as_needed: -Wl,--as-needed}%{?!_disable_ld_no_undefined: -Wl,--no-undefined}%{?!_disable_ld_relro: -Wl,-z,relro}%{?!_disable_ld_O1: -Wl,-O1}%{?!_disable_ld_build_id: -Wl,--build-id}%{?!_disable_ld_enable_new_dtags: -Wl,--enable-new-dtags}
+
+%setup_compile_flags \
+  CFLAGS="${CFLAGS:-%optflags}" ; export CFLAGS ; \
+  CXXFLAGS="${CXXFLAGS:-%optflags}" ; export CXXFLAGS ; \
+  FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ; \
+  %(if [ -n '%ldflags' ]; then echo 'LDFLAGS="$LDFLAGS%ldflags"; export LDFLAGS ;'; fi)
+
+%before_configure \
+  %setup_compile_flags \
+  CONFIGURE_TOP="${CONFIGURE_TOP:-.}"; \
+  %{?!_disable_ld_as_needed:/usr/lib/rpm/manbo/force-as-needed-for-shared-lib-in-libtool ;} \
+  %{?!_disable_ld_no_undefined:/usr/lib/rpm/manbo/drop-ld-no-undefined-for-shared-lib-modules-in-libtool ;} \
+  %{__fix_libtool_ltmain_from_overlinking} ; \
+  %{__fix_libtool_from_moving_options_after_libs} $CONFIGURE_TOP ; \
+  %{__fix_dlsearch_path_in_libtool_for_multilib} $CONFIGURE_TOP %{_lib}
+
+# This is an improved version of %configure (from PLD team).
+%configure \
+  %before_configure ; \
+  %{?!_disable_libtoolize:%{?__libtoolize_configure:%{__libtoolize_configure};}} \
+  [ -f $CONFIGURE_TOP/configure.in -o -f $CONFIGURE_TOP/configure.ac ] && \
+  CONFIGURE_XPATH="--x-includes=%{_prefix}/include --x-libraries=%{_prefix}/%{_lib}" \
+  $CONFIGURE_TOP/configure %{_target_platform} \\\
+	--program-prefix=%{?_program_prefix} \\\
+ 	--prefix=%{_prefix} \\\
+	--exec-prefix=%{_exec_prefix} \\\
+	--bindir=%{_bindir} \\\
+	--sbindir=%{_sbindir} \\\
+	--sysconfdir=%{_sysconfdir} \\\
+	--datadir=%{_datadir} \\\
+	--includedir=%{_includedir} \\\
+	--libdir=%{_libdir} \\\
+	--libexecdir=%{_libexecdir} \\\
+	--localstatedir=%{_localstatedir} \\\
+	--sharedstatedir=%{_sharedstatedir} \\\
+	--mandir=%{_mandir} \\\
+	--infodir=%{_infodir} \\\
+    $CONFIGURE_XPATH
+
+%configure2_5x \
+  %before_configure ; \
+  %{?_enable_libtoolize:%{?__libtoolize_configure:%{__libtoolize_configure};}} \
+  [ -f $CONFIGURE_TOP/configure.in -o -f $CONFIGURE_TOP/configure.ac ] && \
+  CONFIGURE_XPATH="--x-includes=%{_prefix}/include --x-libraries=%{_prefix}/%{_lib}" \
+  $CONFIGURE_TOP/configure --build=%{_target_platform} \\\
+ 	--prefix=%{_prefix} \\\
+	--exec-prefix=%{_exec_prefix} \\\
+	--bindir=%{_bindir} \\\
+	--sbindir=%{_sbindir} \\\
+	--sysconfdir=%{_sysconfdir} \\\
+	--datadir=%{_datadir} \\\
+	--includedir=%{_includedir} \\\
+	--libdir=%{_libdir} \\\
+	--libexecdir=%{_libexecdir} \\\
+	--localstatedir=%{_localstatedir} \\\
+	--sharedstatedir=%{_sharedstatedir} \\\
+	--mandir=%{_mandir} \\\
+	--infodir=%{_infodir} \\\
+    $CONFIGURE_XPATH

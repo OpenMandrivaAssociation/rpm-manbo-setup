@@ -1,0 +1,7 @@
+# directories #######################################
+%_sysconfdir    /etc
+%_defaultdocdir %_datadir/doc
+
+%_localstatedir %{_var}
+%_logdir 	%{_var}/log
+%_libexecdir 	%_libdir

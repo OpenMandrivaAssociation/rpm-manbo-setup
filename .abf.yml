@@ -1,8 +1,0 @@
-sources:
-  "drop-ld-no-undefined-for-shared-lib-modules-in-libtool:"	74a621b684b4e81773fee761c389acd2ed5e9298
-  "fix-dlsearch-path-in-libtool-for-multilib:"	f9f1d7f4a1cc5ba1d578ad0c0ed604c459a9f415
-  "fix-libtool-from-moving-options-after-libs:"	ea639c4a2f35731a701bd4fb8f4d04cdc6d0474d
-  "fix-libtool-ltmain-from-overlinking:"	31b8528c9dd6edab52616034cecaa74aebc478ed
-  "force-as-needed-for-shared-lib-in-libtool:"	1cc5e0613d91d68716cf265c8c7ce4ed2f2ef89e
-  "manbo-build.macros:"	c0a3c693befa7aa2c483b75692e603fe850f4ac2
-  "manbo.macros:"	c29511b5597c7cb7dd5dee9d579c7c21732347b0

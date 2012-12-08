@@ -1,7 +1,0 @@
-drop-ld-no-undefined-for-shared-lib-modules-in-libtool
-fix-dlsearch-path-in-libtool-for-multilib
-fix-libtool-from-moving-options-after-libs
-fix-libtool-ltmain-from-overlinking
-force-as-needed-for-shared-lib-in-libtool
-manbo-build.macros
-manbo.macros
